@@ -2,8 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils.japan_to_user_time import japan_to_user_time
+from functools import lru_cache
 
 
+@lru_cache(maxsize=32)
 def scrape_mal_id(anime_schedule_relative_url):
     url = f'https://animeschedule.net/{anime_schedule_relative_url}'
     response = requests.get(url)
@@ -20,6 +22,7 @@ def scrape_mal_id(anime_schedule_relative_url):
     return mal_id
 
 
+@lru_cache(maxsize=32)
 def fetch_details(relative_url):
     try:
         mal_id = scrape_mal_id(relative_url)
@@ -28,7 +31,8 @@ def fetch_details(relative_url):
     return mal_id
 
 
-def scrape_anime_schedule(year, week):
+@lru_cache(maxsize=32)
+def scrape_anime_schedule(year, week=10):
     url = f'https://animeschedule.net/?year={year}&week={week}'
     response = requests.get(url)
     if response.status_code != 200:
