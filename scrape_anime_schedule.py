@@ -32,7 +32,7 @@ def fetch_details(relative_url):
 
 
 @lru_cache(maxsize=32)
-def scrape_anime_schedule(year, week=10):
+def scrape_anime_schedule(year, week):
     url = f'https://animeschedule.net/?year={year}&week={week}'
     response = requests.get(url)
     if response.status_code != 200:
@@ -46,7 +46,10 @@ def scrape_anime_schedule(year, week=10):
 
     for day_column in day_columns:
         anime_cards.extend(day_column.find_all_next(
-            'div', class_=['timetable-column-show aired', 'timetable-column-show aired expanded']
+            'div', class_=[
+                'timetable-column-show aired', 'timetable-column-show aired expanded',
+                'timetable-column-show unaired', 'timetable-column-show unaired expanded',
+            ]
         ))
 
     with ThreadPoolExecutor(max_workers=100) as executor:
