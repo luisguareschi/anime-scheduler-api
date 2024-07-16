@@ -12,6 +12,11 @@ def after_request(response):
     return response
 
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"message": "Welcome to the anime schedule API"}), 200
+
+
 @app.route('/schedule', methods=['GET'])
 def get_anime_schedule():
     # Get the date from the query parameters
@@ -31,4 +36,4 @@ def get_anime_schedule():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=10_000)
+    app.run(debug=True, host='0.0.0.0', port=8080)
